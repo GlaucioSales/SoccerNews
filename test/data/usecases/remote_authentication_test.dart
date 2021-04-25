@@ -1,3 +1,4 @@
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -12,24 +13,38 @@ class RemoteAuthentication {
   });
 
   Future<void> auth() async {
-    await httpClient.request(url: url);
+    await httpClient.request(
+      url: url,
+      method: 'post',
+    );
   }
 }
 
 abstract class HttpClient {
   Future<void> request({
     @required String url,
+    @required String method,
   });
 }
 
 class HttpClientMock extends Mock implements HttpClient {}
 
 void main() {
-  test("Shoul call HttpClient with correct URL", () async {
-    final httpClient = HttpClientMock();
-    final url = "http//glauciosales1995.com.br";
-    final sut = RemoteAuthentication(httpClient: httpClient, url: url);
+  RemoteAuthentication sut;
+  HttpClient httpClient;
+  String url;
+
+  setUp(() {
+    httpClient = HttpClientMock();
+    url = faker.internet.httpUrl();
+    sut = RemoteAuthentication(
+      httpClient: httpClient,
+      url: url,
+    );
+  });
+
+  test("Shoul call HttpClient with correct values", () async {
     await sut.auth();
-    verify(httpClient.request(url: url));
+    verify(httpClient.request(url: url, method: 'post'));
   });
 }
