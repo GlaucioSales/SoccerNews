@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:soccer_news/data/use_cases/remote_authentication_params.dart';
 
+import '../../domain/errors/errors.dart';
 import '../../domain/use_cases/use_cases.dart';
 import '../http/http.dart';
+import '../use_cases/use_cases.dart';
 
 class RemoteAuthentication {
   final HttpClient httpClient;
@@ -15,6 +16,10 @@ class RemoteAuthentication {
 
   Future<void> auth(AuthenticationParams params) async {
     final body = RemoteAuthenticationParams.fromDomain(params).toJson();
-    await httpClient.request(url: url, method: 'post', body: body);
+    try {
+      await httpClient.request(url: url, method: 'post', body: body);
+    } on HttpError {
+      throw DomainError.unexpected;
+    }
   }
 }
