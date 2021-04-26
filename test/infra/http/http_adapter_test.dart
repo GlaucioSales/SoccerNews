@@ -23,10 +23,15 @@ main() {
   });
 
   group('post', () {
-    test('Should call post with corrects values', () async {
-      await sut.request(url: url, method: 'post');
+    PostExpectation _mockRequest() => when(
+        client.post(any, body: anyNamed('body'), headers: anyNamed('headers')));
+    void _mockResponse(int statusCode,
+        {String body = '{"any_arguments":"any_value"}'}) {
+      _mockRequest().thenAnswer((_) async => Response(body, statusCode));
+    }
 
-      verify(client.post(HttpUrlParse.fromURL(url).toUri(), headers: headers));
+    setUp(() {
+      _mockResponse(200);
     });
 
     test('Should call post with correct body', () async {
@@ -47,17 +52,13 @@ main() {
     });
 
     test('Should return data if post returns 200', () async {
-      when(client.post(any, headers: headers)).thenAnswer(
-          (_) async => Response('{"any_arguments":"any_value"}', 200));
-
       final response = await sut.request(url: url, method: 'post');
 
       expect(response, {'any_arguments': 'any_value'});
     });
 
     test('Should return null if post returns 200', () async {
-      when(client.post(any, headers: headers))
-          .thenAnswer((_) async => Response('', 200));
+      _mockResponse(200, body: '');
 
       final response = await sut.request(url: url, method: 'post');
 
