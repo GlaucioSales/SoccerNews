@@ -28,5 +28,31 @@ main() {
 
       verify(client.post(HttpUrlParse.fromURL(url).toUri(), headers: headers));
     });
+
+    test('Should call post with correct body', () async {
+      final Map<String, String> headers = {
+        'content-type': 'application/json',
+        'accept': 'application/json'
+      };
+      final Map<String, dynamic> body = {
+        'any_arguments': 'any_value',
+      };
+
+      await sut.request(url: url, method: 'post', body: body);
+
+      verify(client.post(HttpUrlParse.fromURL(url).toUri(),
+          headers: headers, body: '{"any_arguments":"any_value"}'));
+    });
+
+    test('Should call post without body', () async {
+      final Map<String, String> headers = {
+        'content-type': 'application/json',
+        'accept': 'application/json'
+      };
+
+      await sut.request(url: url, method: 'post');
+
+      verify(client.post(HttpUrlParse.fromURL(url).toUri(), headers: headers));
+    });
   });
 }

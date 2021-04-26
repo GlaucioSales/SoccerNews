@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:soccer_news/domain/use_cases/authentication_params.dart';
+
+import '../../domain/use_cases/authentication_params.dart';
 
 class RemoteAuthenticationParams {
   final String email;
