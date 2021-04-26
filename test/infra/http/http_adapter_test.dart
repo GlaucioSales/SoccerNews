@@ -11,29 +11,25 @@ main() {
   ClientMock client;
   HttpAdapter sut;
   String url;
+  Map<String, String> headers;
   setUp(() {
     client = ClientMock();
     sut = HttpAdapter(client);
     url = faker.internet.httpUrl();
+    headers = {
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    };
   });
 
   group('post', () {
     test('Should call post with corrects values', () async {
-      final Map<String, String> headers = {
-        'content-type': 'application/json',
-        'accept': 'application/json'
-      };
-
       await sut.request(url: url, method: 'post');
 
       verify(client.post(HttpUrlParse.fromURL(url).toUri(), headers: headers));
     });
 
     test('Should call post with correct body', () async {
-      final Map<String, String> headers = {
-        'content-type': 'application/json',
-        'accept': 'application/json'
-      };
       final Map<String, dynamic> body = {
         'any_arguments': 'any_value',
       };
@@ -45,14 +41,18 @@ main() {
     });
 
     test('Should call post without body', () async {
-      final Map<String, String> headers = {
-        'content-type': 'application/json',
-        'accept': 'application/json'
-      };
-
       await sut.request(url: url, method: 'post');
 
       verify(client.post(HttpUrlParse.fromURL(url).toUri(), headers: headers));
+    });
+
+    test('Should return data if post returns 200', () async {
+      when(client.post(any, headers: headers)).thenAnswer(
+          (_) async => Response('{"any_arguments":"any_value"}', 200));
+
+      final response = await sut.request(url: url, method: 'post');
+
+      expect(response, {'any_arguments': 'any_value'});
     });
   });
 }
