@@ -26,7 +26,9 @@ class HttpAdapter implements HttpClient {
       headers: headers,
       body: jsonBody,
     );
-    final jsonResponse = response != null ? jsonDecode(response.body) : null;
-    return jsonResponse;
+    if (response == null || response.body == '') {
+      return null;
+    }
+    return jsonDecode(response.body);
   }
 }

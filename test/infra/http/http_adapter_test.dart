@@ -54,5 +54,14 @@ main() {
 
       expect(response, {'any_arguments': 'any_value'});
     });
+
+    test('Should return null if post returns 200', () async {
+      when(client.post(any, headers: headers))
+          .thenAnswer((_) async => Response('', 200));
+
+      final response = await sut.request(url: url, method: 'post');
+
+      expect(response, null);
+    });
   });
 }
