@@ -81,5 +81,23 @@ main() {
 
       expect(response, null);
     });
+
+    test('Should return BadRequestError if post returns 400 without data',
+        () async {
+      _mockResponse(400, body: '');
+
+      final future = sut.request(url: url, method: 'post');
+
+      expect(future, throwsA(HttpError.badRequest));
+    });
+
+    test('Should return BadRequestError if post returns 400 with data',
+        () async {
+      _mockResponse(400);
+
+      final future = sut.request(url: url, method: 'post');
+
+      expect(future, throwsA(HttpError.badRequest));
+    });
   });
 }
