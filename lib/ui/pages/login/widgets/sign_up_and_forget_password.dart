@@ -6,13 +6,31 @@ class SignUpAndForgetPassword extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          "sign up",
-          style: TextStyle(fontWeight: FontWeight.bold),
+        TextButton(
+          child: Text(
+            "sign up",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontWeight: FontWeight.bold
+            ),
+          ),
+          onPressed: (){
+
+          },
         ),
-        Text(
-          "Forget Password?",
-          style: TextStyle(fontWeight: FontWeight.bold),
+        TextButton(
+          child: Text(
+            "Forget Password?",
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.bold
+            ),
+          ),
+          onPressed: (){
+
+          },
         ),
       ],
     );

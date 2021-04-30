@@ -4,14 +4,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:soccer_news/ui/pages/login/login.dart';
 
 void main() {
-  MaterialApp loginPage;
-
-  setUp((){
-    loginPage = MaterialApp(home: LoginPage());
-  });
+  Future<void> loadPage (WidgetTester tester) async {
+    MaterialApp loginPage = MaterialApp(home: LoginPage());
+    await tester.pumpWidget(loginPage);
+  }
 
   testWidgets('Should load with correct initial state', (WidgetTester tester) async {
-    await tester.pumpWidget(loginPage);
+    await loadPage(tester);
 
     final emailTextChildren = find.descendant(
         of: find.bySemanticsLabel('Email address'),
@@ -34,7 +33,13 @@ void main() {
         reason: 'when a TextFormField has only a Text child, means it has no errors, since one of childs is always the label text'
     );
 
-    InkWell button = tester.widget<InkWell>(find.byType(InkWell));
-    expect(button.onTap, null);
+    ElevatedButton button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+    expect(button.onPressed, null);
+  });
+
+  testWidgets('Should call validate with correct values', (WidgetTester tester) async {
+    await loadPage(tester);
+
+
   });
 }
