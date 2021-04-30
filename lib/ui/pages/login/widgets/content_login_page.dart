@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'widgets.dart';
+import '../login.dart';
 
 class ContentLoginPage extends StatelessWidget {
+  final LoginPresenter presenter;
+
+  ContentLoginPage(this.presenter);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -13,7 +17,7 @@ class ContentLoginPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextWelcomeBack(),
-            FormLogin(),
+            FormLogin(presenter),
             SignInLogin(),
             LoginWithSocial(),
             SignUpAndForgetPassword(),

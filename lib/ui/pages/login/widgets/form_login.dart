@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import '../login.dart';
 
 class FormLogin extends StatelessWidget {
+  final LoginPresenter presenter;
+
+  FormLogin(this.presenter);
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -14,6 +19,8 @@ class FormLogin extends StatelessWidget {
               hintText: 'Email address',
               hintStyle: TextStyle(color: Colors.grey),
             ),
+            keyboardType: TextInputType.emailAddress,
+            onChanged: presenter.validateEmail,
           ),
           SizedBox(
             height: 35,
@@ -26,6 +33,7 @@ class FormLogin extends StatelessWidget {
               hintText: 'Password',
               hintStyle: TextStyle(color: Colors.grey),
             ),
+            onChanged: presenter.validatePassword,
           ),
         ],
       ),

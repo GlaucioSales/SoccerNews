@@ -1,1 +1,10 @@
 export 'login_page.dart';
+export 'login_presenter.dart';
+export 'widgets/background_login_page.dart';
+export 'widgets/content_login_page.dart';
+export 'widgets/content_login_page.dart';
+export 'widgets/form_login.dart';
+export 'widgets/login_with_social.dart';
+export 'widgets/sign_in_login.dart';
+export 'widgets/sign_up_and_forget_password.dart';
+export 'widgets/text_welcome_back.dart';
