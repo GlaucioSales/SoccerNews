@@ -11,29 +11,43 @@ class FormLogin extends StatelessWidget {
     return Form(
       child: Column(
         children: [
-          TextFormField(
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.email_outlined,
-              ),
-              hintText: 'Email address',
-              hintStyle: TextStyle(color: Colors.grey),
-            ),
-            keyboardType: TextInputType.emailAddress,
-            onChanged: presenter.validateEmail,
+          StreamBuilder<String>(
+            stream: presenter.emailErrorController,
+            builder: (context, snapshot) {
+              final String error = snapshot.data;
+              return TextFormField(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.email_outlined,
+                  ),
+                  hintText: 'Email address',
+                  hintStyle: TextStyle(color: Colors.grey),
+                  errorText: error == '' ? null : error,
+                ),
+                keyboardType: TextInputType.emailAddress,
+                onChanged: presenter.validateEmail,
+              );
+            }
           ),
           SizedBox(
             height: 35,
           ),
-          TextFormField(
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.lock_outlined,
-              ),
-              hintText: 'Password',
-              hintStyle: TextStyle(color: Colors.grey),
-            ),
-            onChanged: presenter.validatePassword,
+          StreamBuilder<String>(
+            stream: presenter.passwordErrorController,
+            builder: (context, snapshot) {
+              final String error = snapshot.data;
+              return TextFormField(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.lock_outlined,
+                  ),
+                  hintText: 'Password',
+                  hintStyle: TextStyle(color: Colors.grey),
+                  errorText: error == '' ? null : error,
+                ),
+                onChanged: presenter.validatePassword,
+              );
+            }
           ),
         ],
       ),
