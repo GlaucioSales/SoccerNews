@@ -13,15 +13,20 @@ void main() {
   LoginPresenter presenter;
   StreamController<String> emailErrorController;
   StreamController<String> passwordErrorController;
+  StreamController<bool> isFormValidController;
 
   Future<void> loadPage (WidgetTester tester) async {
     presenter = LoginPresenterMock();
     emailErrorController = StreamController<String>();
     passwordErrorController = StreamController<String>();
+    isFormValidController = StreamController<bool>();
     when(presenter.emailErrorController)
         .thenAnswer((realInvocation) => emailErrorController.stream);
     when(presenter.passwordErrorController)
         .thenAnswer((realInvocation) => passwordErrorController.stream);
+    when(presenter.isFormValidController)
+        .thenAnswer((realInvocation) => isFormValidController.stream);
+
     MaterialApp loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
   }
@@ -29,6 +34,7 @@ void main() {
   tearDown((){
     emailErrorController.close();
     passwordErrorController.close();
+    isFormValidController.close();
   });
 
 
@@ -53,7 +59,6 @@ void main() {
     expect(
         passwordTextChildren,
         findsOneWidget,
-        reason: 'when a TextFormField has only a Text child, means it has no errors, since one of childs is always the label text'
     );
 
     ElevatedButton button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
@@ -149,6 +154,15 @@ void main() {
         ),
         findsOneWidget
     );
+  });
+
+  testWidgets('Should enable button if form is valid', (WidgetTester tester) async {
+    await loadPage(tester);
+    isFormValidController.add(true);
+
+    await tester.pump();
+    ElevatedButton button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+    expect(button.onPressed, isNotNull);
   });
 
 

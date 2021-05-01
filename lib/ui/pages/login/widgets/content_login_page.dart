@@ -18,7 +18,7 @@ class ContentLoginPage extends StatelessWidget {
           children: [
             TextWelcomeBack(),
             FormLogin(presenter),
-            SignInLogin(),
+            SignInLogin(presenter),
             LoginWithSocial(),
             SignUpAndForgetPassword(),
           ],
