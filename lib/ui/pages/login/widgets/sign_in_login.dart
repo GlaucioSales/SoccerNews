@@ -19,17 +19,16 @@ class SignInLogin extends StatelessWidget {
           ),
         ),
         StreamBuilder<bool>(
-          stream: presenter.isFormValidController,
-          builder: (context, snapshot) {
-            return ElevatedButton(
-              child: Icon(
-                Icons.arrow_forward_ios_sharp,
-                color: Colors.white,
-              ),
-              onPressed: snapshot.data == true ? (){} : null,
-            );
-          }
-        ),
+            stream: presenter.isFormValidController,
+            builder: (context, snapshot) {
+              return ElevatedButton(
+                child: Icon(
+                  Icons.arrow_forward_ios_sharp,
+                  color: Colors.white,
+                ),
+                onPressed: snapshot.data == true ? presenter.auth : null,
+              );
+            }),
       ],
     );
   }
