@@ -1,7 +1,8 @@
 abstract class LoginPresenter {
-  Stream get emailErrorController;
-  Stream get passwordErrorController;
-  Stream get isFormValidController;
+  Stream get emailErrorStream;
+  Stream get passwordErrorStream;
+  Stream get isFormValidStream;
+  Stream get isLoadingStream;
 
   void validateEmail(String email);
   void validatePassword(String password);

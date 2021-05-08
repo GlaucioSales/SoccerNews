@@ -13,18 +13,22 @@ void main() {
   StreamController<String> emailErrorController;
   StreamController<String> passwordErrorController;
   StreamController<bool> isFormValidController;
+  StreamController<bool> isLoadingController;
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = LoginPresenterMock();
     emailErrorController = StreamController<String>();
     passwordErrorController = StreamController<String>();
     isFormValidController = StreamController<bool>();
-    when(presenter.emailErrorController)
+    isLoadingController = StreamController<bool>();
+    when(presenter.emailErrorStream)
         .thenAnswer((realInvocation) => emailErrorController.stream);
-    when(presenter.passwordErrorController)
+    when(presenter.passwordErrorStream)
         .thenAnswer((realInvocation) => passwordErrorController.stream);
-    when(presenter.isFormValidController)
+    when(presenter.isFormValidStream)
         .thenAnswer((realInvocation) => isFormValidController.stream);
+    when(presenter.isLoadingStream)
+        .thenAnswer((realInvocation) => isLoadingController.stream);
 
     MaterialApp loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
@@ -183,5 +187,14 @@ void main() {
     await tester.pump();
 
     verify(presenter.auth()).called(1);
+  });
+
+  testWidgets('Should present loading ', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isLoadingController.add(true);
+    await tester.pump();
+
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 }
