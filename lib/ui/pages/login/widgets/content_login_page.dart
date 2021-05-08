@@ -9,6 +9,20 @@ class ContentLoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    presenter.mainErrorStream.listen((error) {
+      if (error != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              error,
+              textAlign: TextAlign.center,
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    });
+
     return Container(
       child: Padding(
         padding: EdgeInsets.fromLTRB(32, 64, 32, 32),
