@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:soccer_news/ui/pages/login/widgets/error_snackbar.dart';
 
 import '../login.dart';
 
@@ -11,15 +12,7 @@ class ContentLoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     presenter.mainErrorStream.listen((error) {
       if (error != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              error,
-              textAlign: TextAlign.center,
-            ),
-            backgroundColor: Colors.red,
-          ),
-        );
+        showErrorMessage(context: context, error: error);
       }
     });
 

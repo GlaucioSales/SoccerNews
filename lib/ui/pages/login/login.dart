@@ -3,6 +3,7 @@ export 'login_presenter.dart';
 export 'widgets/background_login_page.dart';
 export 'widgets/content_login_page.dart';
 export 'widgets/content_login_page.dart';
+export 'widgets/error_snackbar.dart';
 export 'widgets/form_login.dart';
 export 'widgets/login_with_social.dart';
 export 'widgets/sign_in_login.dart';
