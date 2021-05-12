@@ -26,13 +26,20 @@ abstract class Validation {
 class MockValidation extends Mock implements Validation {}
 
 void main() {
+  MockValidation validation;
+  StreamLoginPresenter sut;
+  String email;
+
+  setUp(() {
+    validation = MockValidation();
+    sut = StreamLoginPresenter(validation: validation);
+
+    email = faker.internet.disposableEmail();
+  });
+
   test('Should call validation with correct email', () {
-    final validation = MockValidation();
-    final sut = StreamLoginPresenter(validation: validation);
-
-    String email = faker.internet.disposableEmail();
-
     sut.validateEmail(field: 'email', value: email);
+
     verify(validation.validate(field: 'email', value: email)).called(1);
   });
 }
