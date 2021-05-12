@@ -40,6 +40,7 @@ void main() {
     sut.isFormValid.listen(expectAsync1((isValid)=> expect(isValid, false)));
 
     sut.validateEmail(email);
+    sut.validateEmail(email);
   });
 
   test('Should emit null if validation succeed', () {
@@ -54,5 +55,23 @@ void main() {
     sut.validatePassword(password);
 
     verify(validation.validate(field: 'password', value: password)).called(1);
+  });
+
+  test('Should emit password error if validation fails', () {
+    mockValidation(value: 'error');
+
+    sut.passwordErrorStream.listen(expectAsync1((error)=> expect(error, 'error')));
+    sut.isFormValid.listen(expectAsync1((isValid)=> expect(isValid, false)));
+
+    sut.validatePassword(password);
+  });
+
+  test('Should emit password null if validation succeed', () {
+    sut.emailErrorStream.listen(expectAsync1((error)=> expect(error, null)));
+
+    sut.isFormValid.listen(expectAsync1((isValid)=> expect(isValid, false)));
+
+    sut.validatePassword(password);
+    sut.validatePassword(password);
   });
 }
