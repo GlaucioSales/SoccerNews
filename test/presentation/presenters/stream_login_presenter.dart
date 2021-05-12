@@ -1,22 +1,35 @@
+import 'dart:async';
+
 import 'package:faker/faker.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 class StreamLoginPresenter {
   final Validation validation;
 
+  final StreamController<LoginState> _controller =
+      StreamController<LoginState>.broadcast();
+
+  var _state = LoginState();
+
+  Stream<String> get emailErrorStream =>
+      _controller.stream.map((state) => state.emailError);
+
   StreamLoginPresenter({@required this.validation});
 
-  String validateEmail({
-    @required String field,
-    @required String value,
-  }) {
-    return validation.validate(
-      field: field,
-      value: value,
-    );
+  void validateEmail(String email) {
+    _state.emailError = validation.validate(field: 'email', value: email);
+    _controller.add(_state);
   }
+
+  void disposed() {
+    _controller.close();
+  }
+}
+
+class LoginState {
+  String emailError;
 }
 
 abstract class Validation {
@@ -38,8 +51,18 @@ void main() {
   });
 
   test('Should call validation with correct email', () {
-    sut.validateEmail(field: 'email', value: email);
+    sut.validateEmail(email);
 
     verify(validation.validate(field: 'email', value: email)).called(1);
+  });
+
+  test('Should emit email error if validation fails', () {
+    when(
+      validation.validate(field: anyNamed('field'), value: anyNamed('value')),
+    ).thenReturn('error');
+
+    expectLater(sut.emailErrorStream, emits('error'));
+
+    sut.validateEmail(email);
   });
 }
