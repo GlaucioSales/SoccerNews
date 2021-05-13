@@ -67,11 +67,21 @@ void main() {
   });
 
   test('Should emit password null if validation succeed', () {
-    sut.emailErrorStream.listen(expectAsync1((error)=> expect(error, null)));
-
+    sut.passwordErrorStream.listen(expectAsync1((error)=> expect(error, null)));
     sut.isFormValid.listen(expectAsync1((isValid)=> expect(isValid, false)));
 
     sut.validatePassword(password);
+    sut.validatePassword(password);
+  });
+
+  test('Should block in button case a error in display', () {
+    mockValidation(field: 'email', value: 'error');
+
+    sut.emailErrorStream.listen(expectAsync1((error)=> expect(error, 'error')));
+    sut.passwordErrorStream.listen(expectAsync1((error)=> expect(error, null)));
+    sut.isFormValid.listen(expectAsync1((isValid)=> expect(isValid, false)));
+
+    sut.validateEmail(email);
     sut.validatePassword(password);
   });
 }
