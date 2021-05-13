@@ -1,14 +1,18 @@
 import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
+import 'package:soccer_news/domain/use_cases/authentication.dart';
+import 'package:soccer_news/domain/use_cases/authentication_params.dart';
 import 'package:test/test.dart';
 
 import 'package:soccer_news/presentation/presenter/presenter.dart';
 import 'package:soccer_news/presentation/protocols/protocols.dart';
 
 class MockValidation extends Mock implements Validation {}
+class MockAuthentication extends Mock implements Authentication {}
 
 void main() {
-  MockValidation validation;
+  Validation validation;
+  Authentication authentication;
   StreamLoginPresenter sut;
   String email;
   String password;
@@ -21,7 +25,8 @@ void main() {
 
   setUp(() {
     validation = MockValidation();
-    sut = StreamLoginPresenter(validation: validation);
+    authentication = MockAuthentication();
+    sut = StreamLoginPresenter(validation: validation, authentication: authentication);
     email = faker.internet.disposableEmail();
     password = faker.internet.password();
     mockValidation();
@@ -93,5 +98,14 @@ void main() {
     sut.validateEmail(email);
     await Future.delayed(Duration.zero);
     sut.validatePassword(password);
+  });
+
+  test('Should calls Authentication with corrects values', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    await sut.auth();
+
+    verify(authentication.auth(AuthenticationParams(email: email, secret: password))).called(1);
   });
 }
